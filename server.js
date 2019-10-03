@@ -19,8 +19,8 @@ app.get('/', (req, res) => res.sendFile(publicPath + "/client.html"));
 
 app.listen(port, () => console.log(`To view webpage visit localhost:${port}`));
 
-let getWeather = (city, country) =>{
-    let reqStr = `${weatherUrl}?q=${city},${country}&APPID=${API_KEY}`;
+let getWeather = (location) =>{
+    let reqStr = `${weatherUrl}?q=${location}&APPID=${API_KEY}`;
     //console.log(reqStr);
 
     request(reqStr, {json:true}, (err, res, body) => {
@@ -31,4 +31,4 @@ let getWeather = (city, country) =>{
     });
 }
 
-//getWeather("Dublin", "Ireland");
+getWeather("Dublin,Ireland");
