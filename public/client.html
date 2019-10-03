@@ -9,15 +9,19 @@
     <div id = "app">
         <div>
             <input v-model="search" placeholder="city,country">
-            <p>Searching for {{search}}</p>
+            <p>Searching for: {{search}}</p>
         </div>
+           <a href="http://localhost:3000/weather/dublin,ireland" class="button">Test weather for Dublin,Ireland</a>
+
+        </form>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <script>
         var app = new Vue({
             el:'#app',
             data:{
-                message:"Hello test"
+                message:"Hello test",
+                search:""
             }
         })
     </script>
