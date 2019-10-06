@@ -1,9 +1,9 @@
 "use strict";
 
 const express = require("express");
-const request = require("request");
 const fs = require("fs");
 const path = require("path");
+const fetch = require("node-fetch");
 
 const app = express();
 const port = 3000;
@@ -17,7 +17,11 @@ const weatherUrl = "https://api.openweathermap.org/data/2.5/forecast";
 
 
 app.get('/', (req, res) => res.sendFile(publicPath + "/client.html"));
-app.get('/weather/:location',  getWeather);
+//app.get('/:location',  getWeather);
+app.get('/:location', (req, res, next) =>{
+    console.log(":)")
+    res.sendFile(publicPath + "/client.html", {"location":"ireland"});
+});
 
 app.listen(port, () => console.log(`To view webpage visit localhost:${port}`));
 
@@ -31,11 +35,12 @@ function getWeather(req, res){
     }
 
     let reqStr = `${weatherUrl}?q=${loc}&APPID=${API_KEY}`; 
-    request(reqStr, {json:true}, (err, apiResponse, body) => {
-        if(err){ return console.log(err); }
-
-        //console.log(JSON.stringify(response.body, null, 2));
-        res.send(apiResponse.body);
+    
+    let p = fetch(reqStr)
+    p.then(res => res.json())
+    .then(data => { res.send({data});})
+    .catch(err => {
+        res.send("Error 400: Bad request");
     });
 }
 
