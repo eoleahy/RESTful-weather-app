@@ -7,12 +7,12 @@
 </head>
 <body>
     <div id = "app">
-        <div>
-            <input v-model="search" placeholder="city,country">
-        </div>
-           <a href="http://localhost:3000/dublin,ireland" class="button">Test weather for {{search}}</a>
-
-        </form>
+        <h1>Weather app</h1>
+        Search for city<br>
+        <input v-model="search" placeholder="city,country">
+        <button v-on:click="searchWeather">Search for weather in {{search}}</button>
+        <br>{{weatherData}}
+           
     </div>
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <script>
@@ -20,9 +20,25 @@
             el:'#app',
             data:{
                 message:"Hello test",
+                pastSearches: [],
+                weatherData:[],
                 search:""
+            },
+            methods:{
+                searchWeather: getWeather
             }
         })
+
+        function getWeather(){
+            console.log("Function called");
+            let p = fetch(`/${this.search}`);
+            p.then(response => response.json())
+            .then(response => {
+                this.weatherData = response.data;
+                console.table(response.data);
+                this.pastSearches.push(response.data);
+            });
+        }
     </script>
 </body>
 </html>
