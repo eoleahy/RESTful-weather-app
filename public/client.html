@@ -1,20 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="style.css">
     <title>Internet Apps 1</title>
 </head>
+
 <body>
-    <div id = "app">
+    <div id="app">
         <h1>Weather app</h1>
-        Search for city<br>
-        <input v-model="search" placeholder="city,country">
-        <button v-on:click="searchWeather">Search for weather in {{search}}</button>
+        <input v-model="search" placeholder="City">
+        <button v-on:click="searchWeather">Search</button>
         <template v-if="gotResponse">
             <br>Weather for {{search}}
             <template v-if="packForRain">
-                <br>You should pack an umbrella!
+                <br>It will rain, you should pack an umbrella!
             </template>
             <template v-if="averageTemp<10">
                 <br>You should pack for cold weather!
@@ -26,60 +28,97 @@
                 <br>You should pack for hot weather!
             </template>
             <br>Average temperature : {{averageTemp}}
-            <!--<br>{{weatherData}}-->
+
+            <table id="weatherTable">
+                <thead>
+                    <tr>
+                        <th v-for="col in columnNames">
+                            {{col}}
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="row in tableData">
+                        <td> {{row["date"]}} </td>
+                        <td> {{row["wind"]}} </td>
+                        <td> {{row["temp"]}} </td>
+                        <td> {{row["rain"]}} </td>
+                    </tr>
+                </tbody>
+            </table>
         </template>
-           
+
     </div>
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <script>
         var app = new Vue({
-            el:'#app',
-            data:{
-                message:"Hello test",
+            el: '#app',
+            data: {
+                message: "Hello test",
                 pastSearches: [],
-                weatherData:"",
-                gotResponse:false,
-                packForRain:false,
-                temperatureArray:[],
-                averageTemp:0,
-                rainArray:[],
-                windArray:[],
-                dates: [],
-                search:""
+                columnNames: ["Date & Time", "Windspeed (m/s)", "Temperature (C)", "Rainfall (mm)"],
+                gotResponse: false,
+                packForRain: false,
+                averageTemp: 0,
+                tableData: [],
+                rowNames: [],
+                search: ""
             },
-            methods:{
+            methods: {
                 searchWeather: getWeather
             }
         })
 
-        function getWeather(){
-            console.log("Function called");
+        function getWeather() {
             let p = fetch(`/${this.search}`);
             p.then(response => response.json())
-            .then(response => {
-                this.weatherData = response.data.list;
-                this.pastSearches.push(response.data);
-                this.gotResponse=true;
-    
-                //Rain check
-                for(const entry of this.weatherData){
-                    if(entry["weather"][0]["main"]==="Rain"){
-                        this.packForRain=true;
-                        break;
+                .then(response => {
+                    this.weatherData = response.data.list;
+                    this.pastSearches.push(response.data);
+                    this.gotResponse = true;
+
+                    //Rain check
+                    for (const entry of this.weatherData) {
+                        if (entry["weather"][0]["main"] === "Rain") {
+                            this.packForRain = true;
+                            break;
+                        }
+                        this.packForRain = false;
                     }
-                    this.packForRain=false;
-                }
 
-                let tempArray = [];
-                let acc = 0
-                for(const entry of this.weatherData){
-                    this.temperatureArray.push(entry["main"]["temp"]);
-                    acc = entry["main"]["temp"] + acc;
-                }
-                this.averageTemp = acc / this.weatherData.length;
+                    let acc = 0;
+                    let wind = [];
+                    let temp = [];
+                    let rain = [];
+                    let dates = [];
 
-            });
+                    for (const entry of this.weatherData) {
+                        dates.push(entry["dt_txt"]);
+                        temp.push(entry["main"]["temp"]);
+                        wind.push(entry["wind"]["speed"]);
+
+                        if (entry.hasOwnProperty("rain"))
+                            rain.push(entry["rain"]["3h"]);
+                        else
+                            rain.push(0.0);
+
+                        acc = entry["main"]["temp"] + acc;
+                    }
+                    this.averageTemp = acc / this.weatherData.length;
+
+                    let tableData = [];
+                    for (let i = 0; i < wind.length; i++) {
+                        tableData.push({
+                            "date": dates[i],
+                            "temp": temp[i],
+                            "wind": wind[i],
+                            "rain": rain[i]
+                        })
+                    }
+                    this.tableData = tableData;
+                });
         }
     </script>
 </body>
+
 </html>
