@@ -25,7 +25,7 @@ app.listen(port, () => console.log(`To view webpage visit localhost:${port}`));
 function sendWeather(req, res){
     let loc = req.params['location'];
     //console.log(loc);
-    let reqStr = `${weatherUrl}?q=${loc}&APPID=${API_KEY}`; 
+    let reqStr = `${weatherUrl}?q=${loc}&APPID=${API_KEY}&units=metric`; 
     
     let p = fetch(reqStr)
     p.then(res => res.json())
@@ -36,4 +36,4 @@ function sendWeather(req, res){
     });
 }
 
-//getWeather("Dublin,Ireland");
+//sendWeather("Dublin,Ireland");

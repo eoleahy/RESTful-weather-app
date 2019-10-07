@@ -11,7 +11,10 @@
         Search for city<br>
         <input v-model="search" placeholder="city,country">
         <button v-on:click="searchWeather">Search for weather in {{search}}</button>
-        <br>{{weatherData}}
+        <template v-if="gotResponse">
+            <br>Weather for {{search}}
+            <br>{{weatherData}}
+        </template>
            
     </div>
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
@@ -21,7 +24,12 @@
             data:{
                 message:"Hello test",
                 pastSearches: [],
-                weatherData:[],
+                weatherData:"",
+                gotResponse:false,
+                temperatureArray:[],
+                rainArray:[],
+                windArray:[],
+                dates: [],
                 search:""
             },
             methods:{
@@ -34,9 +42,14 @@
             let p = fetch(`/${this.search}`);
             p.then(response => response.json())
             .then(response => {
-                this.weatherData = response.data;
-                console.table(response.data);
+                this.weatherData = response.data.list;
                 this.pastSearches.push(response.data);
+                this.gotResponse=true;
+            
+               // console.log(this.weatherData.list);
+                for(var i = 0; i<this.weatherData.length; i++){
+                    console.log(this.weatherData[i]["dt_txt"]);
+                }
             });
         }
     </script>
