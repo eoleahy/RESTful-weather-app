@@ -13,7 +13,20 @@
         <button v-on:click="searchWeather">Search for weather in {{search}}</button>
         <template v-if="gotResponse">
             <br>Weather for {{search}}
-            <br>{{weatherData}}
+            <template v-if="packForRain">
+                <br>You should pack an umbrella!
+            </template>
+            <template v-if="averageTemp<10">
+                <br>You should pack for cold weather!
+            </template>
+            <template v-else-if="10<=averageTemp && averageTemp<=20">
+                <br>You should pack for warm weather!
+            </template>
+            <template v-else>
+                <br>You should pack for hot weather!
+            </template>
+            <br>Average temperature : {{averageTemp}}
+            <!--<br>{{weatherData}}-->
         </template>
            
     </div>
@@ -26,7 +39,9 @@
                 pastSearches: [],
                 weatherData:"",
                 gotResponse:false,
+                packForRain:false,
                 temperatureArray:[],
+                averageTemp:0,
                 rainArray:[],
                 windArray:[],
                 dates: [],
@@ -45,11 +60,24 @@
                 this.weatherData = response.data.list;
                 this.pastSearches.push(response.data);
                 this.gotResponse=true;
-            
-               // console.log(this.weatherData.list);
-                for(var i = 0; i<this.weatherData.length; i++){
-                    console.log(this.weatherData[i]["dt_txt"]);
+    
+                //Rain check
+                for(const entry of this.weatherData){
+                    if(entry["weather"][0]["main"]==="Rain"){
+                        this.packForRain=true;
+                        break;
+                    }
+                    this.packForRain=false;
                 }
+
+                let tempArray = [];
+                let acc = 0
+                for(const entry of this.weatherData){
+                    this.temperatureArray.push(entry["main"]["temp"]);
+                    acc = entry["main"]["temp"] + acc;
+                }
+                this.averageTemp = acc / this.weatherData.length;
+
             });
         }
     </script>

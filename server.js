@@ -36,4 +36,3 @@ function sendWeather(req, res){
     });
 }
 
-//sendWeather("Dublin,Ireland");
