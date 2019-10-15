@@ -27,7 +27,7 @@
             <template v-else>
                 <br>You should pack for hot weather!
             </template>
-            <br>Average temperature : {{averageTemp}}
+            <br>Average temperature : {{averageTemp}} &#8451;
 
             <table id="weatherTable">
                 <thead>
@@ -56,7 +56,7 @@
             data: {
                 message: "Hello test",
                 pastSearches: [],
-                columnNames: ["Date & Time", "Windspeed (m/s)", "Temperature (C)", "Rainfall (mm)"],
+                columnNames: ["Date & Time", "Windspeed (m/s)", "Temperature (\u2103)", "Rainfall (mm)"],
                 gotResponse: false,
                 packForRain: false,
                 averageTemp: 0,
@@ -92,6 +92,7 @@
                     let rain = [];
                     let dates = [];
 
+                    //Parsing through the json data to get temperature, rain etc.
                     for (const entry of this.weatherData) {
                         dates.push(entry["dt_txt"]);
                         temp.push(entry["main"]["temp"]);
@@ -104,8 +105,9 @@
 
                         acc = entry["main"]["temp"] + acc;
                     }
-                    this.averageTemp = acc / this.weatherData.length;
+                    this.averageTemp = (acc / this.weatherData.length).toFixed(2);
 
+                    //Creating a new array and pushing json for each entry
                     let tableData = [];
                     for (let i = 0; i < wind.length; i++) {
                         tableData.push({

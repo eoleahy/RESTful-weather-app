@@ -22,17 +22,19 @@ app.get('/', (req, res) => res.sendFile(publicPath + "/client.html"));
 
 app.listen(port, () => console.log(`To view webpage visit localhost:${port}`));
 
-function sendWeather(req, res){
+function sendWeather(req, res) {
     let loc = req.params['location'];
     //console.log(loc);
-    let reqStr = `${weatherUrl}?q=${loc}&APPID=${API_KEY}&units=metric`; 
-    
+    let reqStr = `${weatherUrl}?q=${loc}&APPID=${API_KEY}&units=metric`;
+
     let p = fetch(reqStr)
     p.then(res => res.json())
-    .then(data => { res.send({data});
-    })
-    .catch(err => {
-        res.send("Error 400: Bad request");
-    });
+        .then(data => {
+            res.send({
+                data
+            });
+        })
+        .catch(err => {
+            res.send("Error 400: Bad request");
+        });
 }
-
