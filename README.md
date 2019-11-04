@@ -1,9 +1,9 @@
-# Internet-Apps-1
-A reactive client running in an Internet Browser using Vue.Js . 
+# Restful weather app
+A reactive client running in an Internet Browser using Vue.Js .
 
-A Server-side application which exposes at least one API primitive and consumes the services of a 3rd party Web API. 
+NodeJs express server.
 
-An application that inputs the city that someone is planning to go to.  
+Makes a call to the openweatherapi by passing in a location.
 
 Displays for the user some summary information including:
 
