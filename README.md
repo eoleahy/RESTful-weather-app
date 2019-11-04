@@ -12,3 +12,7 @@ Displays for the user some summary information including:
 •	Indicate whether the user should pack for Cold (temp range -10..+10), Warm (+10-+20) or Hot (20+)
 
 •	Give a summary table for the next 5 days showing: Temperature, Wind Speed and Rainfall level
+
+
+
+Viewable at localhost:3000
