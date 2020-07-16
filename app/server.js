@@ -8,7 +8,7 @@ require('dotenv').config();
 const API_KEY = process.env.WEATHER_API;
 const app = express();
 
-const port = 3000;
+const port = process.env.PORT || 3000;
 let publicPath = path.resolve(__dirname, "public");
 app.use(express.static(publicPath));
 
