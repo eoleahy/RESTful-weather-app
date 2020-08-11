@@ -16,3 +16,5 @@ Displays for the user some summary information including:
 
 
 Viewable at localhost:3000
+
+live version : https://rest-weather-app.herokuapp.com
